@@ -1,0 +1,12 @@
+#BlueJ class context
+comment0.params=f
+comment0.target=void\ anyadeFigura(Figura)
+comment1.params=
+comment1.target=java.lang.String\ toString()
+comment2.params=fig
+comment2.target=boolean\ equals(java.lang.Object)
+comment3.params=r
+comment3.target=boolean\ busqueda(java.lang.Object)
+comment4.params=
+comment4.target=double\ area()
+numComments=5
