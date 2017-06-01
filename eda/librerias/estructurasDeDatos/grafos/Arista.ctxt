@@ -1,7 +1,7 @@
 #BlueJ class context
 comment0.params=codAdy\ pesoArista
 comment0.target=Arista(int,\ double)
-comment0.text=\ Construye\ el\ vertice\ Arista\ a\ otro\ de\ un\ grafo\ y\ el\ peso\ \n\ de\ la\ arista\ que\ los\ une.\n\ @param\ \ codigo\ del\ vertice\ Arista\ a\ otro\n\ @param\ \ peso\ de\ la\ arista\ que\ une\ este\ vertice\ y\ su\ Arista\ \n
+comment0.text=\ Construye\ el\ vertice\ Arista\ a\ otro\ de\ un\ grafo\ y\ el\ peso\ \r\n\ de\ la\ arista\ que\ los\ une.\r\n\ @param\ \ codigo\ del\ vertice\ Arista\ a\ otro\r\n\ @param\ \ peso\ de\ la\ arista\ que\ une\ este\ vertice\ y\ su\ Arista\ \r\n
 comment1.params=
 comment1.target=int\ getDestino()
 comment1.text=Devuelve\ el\ vertice\ Arista
@@ -10,7 +10,7 @@ comment2.target=double\ getPeso()
 comment2.text=Devuelve\ el\ peso\ del\ arco\ al\ vertice\ Arista
 comment3.params=
 comment3.target=java.lang.String\ toString()
-comment3.text=Devuelve\ un\ String\ que\ representa\ a\ un\ vertice\ Arista\ a\ otro\ \ \n\ y\ al\ peso\ de\ la\ arista\ que\ los\ une.\n\ @return\ \ String\ \ que\ representa\ a\ un\ Arista\n
+comment3.text=Devuelve\ un\ String\ que\ representa\ a\ un\ vertice\ Arista\ a\ otro\ \ \r\n\ y\ al\ peso\ de\ la\ arista\ que\ los\ une.\r\n\ @return\ \ String\ \ que\ representa\ a\ un\ Arista\r\n
 comment4.params=ay
 comment4.target=int\ compareTo(Arista)
 numComments=5

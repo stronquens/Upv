@@ -34,11 +34,11 @@ public class Arista implements Comparable<Arista>{
 
     public int compareTo(Arista ay){
         if(this.peso < ay.getPeso()){
-            return 1;
+            return -1;
         }else if(this.peso == ay.getPeso()){
             return 0;
         }else{
-            return -1;
+            return 1;
         }
     }
 }

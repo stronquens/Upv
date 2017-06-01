@@ -18,7 +18,8 @@ public class GrafoDirigido extends Grafo {
      */
     @SuppressWarnings("unchecked")
     public GrafoDirigido(int numVertices) {
-        numV = numVertices; numA = 0;
+        numV = numVertices; 
+        numA = 0;
         elArray = new ListaConPI[numVertices]; 
         for (int i = 0; i < numV; i++) {
             elArray[i] = new LEGListaConPI<Adyacente>();
