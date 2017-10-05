@@ -69,19 +69,29 @@
 
 	( Nodo Letra r Tipo bicicleta Distrito 5 )
 	
-	( Recorrido Actual a Destino b CosteTotal 0 Nivel 0)
+	( Recorrido Actual a Destino b Bici false CosteTotal 0 Nivel 0)
 )
-
 
 (defrule PieXaY
-	?c1 <- (Camino Origen ?o Destino ?d Coste ?coste Distrito ?dist)
-	?r <- (Recorrido Actual ?o Destino ?dest CosteTotal ?ct Nivel ?n)
-
+	?r <- ( Recorrido Actual ?ori Destino ?dest Bici ?bic CosteTotal ?costet Nivel ?n )
+	?c1 <- ( Camino Origen ?ori Destino ?d Coste ?coste Tipo ?t )
  => 
-	(printout t ?o crlf)
-	()
+	(assert(Recorrido Actual ?d Destino ?dest Bici ?bic CosteTotal (+ ?costet ?coste) Nivel (+ ?n 1)))
 )
 
 
 
+;Ir en bicicleta: acción para desplazarse en bicicleta de un punto a otro contiguo que
+;se encuentran conectados por un camino apto para ir en bicicleta. El coste de esta
+;operación será la mitad del indicado por el camino (división entera por 2).g 
+;( Camino Origen l Destino m Coste 7 Tipo ambos)
+;( Nodo Letra r Tipo bicicleta Distrito 5 )
+;( Recorrido Actual a Destino b Bici false CosteTotal 0 Nivel 0)
 
+
+(defrule BiciXaY
+	?r <- ( Recorrido Actual ?ori Destino ?dest Bici true CosteTotal ?costet Nivel ?n )
+	?c1 <- ( Camino Origen ?ori Destino ?d Coste ?coste Tipo ambos )
+=>
+	(assert(Recorrido Actual ?d Destino ?dest Bici true CosteTotal (+ ?costet (/ ?coste 2)) Nivel (+ ?n 1)))	
+)
