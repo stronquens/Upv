@@ -76,9 +76,10 @@
 
 (defrule PieXaY
 	(declare (salience 70))
-	?r <- ( Recorrido Actual ?ori Destino ?dest Bici false CosteTotal ?costet Nivel ?n )
-	?c1 <- ( Camino Origen ?ori Destino ?d Coste ?coste Tipo ?t )
-	
+	( Recorrido Actual ?ori Destino ?dest Bici false CosteTotal ?costet Nivel ?n )
+	( Camino Origen ?ori Destino ?d Coste ?coste Tipo ?t )
+	(profundidad-maxima ?prof)
+	(test (< ?n ?prof))
  => 
 	(assert(Recorrido Actual ?d Destino ?dest Bici false CosteTotal (+ ?costet ?coste) Nivel (+ ?n 1)))
 	(bind ?*nod-gen* (+ ?*nod-gen* 1))
@@ -86,8 +87,10 @@
 
 (defrule BiciXaY
 	(declare (salience 90))
-	?r <- ( Recorrido Actual ?ori Destino ?dest Bici true CosteTotal ?costet Nivel ?n )
-	?c1 <- ( Camino Origen ?ori Destino ?d Coste ?coste Tipo ambos )
+	( Recorrido Actual ?ori Destino ?dest Bici true CosteTotal ?costet Nivel ?n )
+	( Camino Origen ?ori Destino ?d Coste ?coste Tipo ambos )
+	(profundidad-maxima ?prof)
+	(test (< ?n ?prof))
 =>
 	(assert(Recorrido Actual ?d Destino ?dest Bici true CosteTotal (+ ?costet (/ ?coste 2)) Nivel (+ ?n 1)))
 	(bind ?*nod-gen* (+ ?*nod-gen* 1))
@@ -95,26 +98,41 @@
 
 (defrule cogerBici
 (declare (salience 50))
-	?r <- ( Recorrido Actual ?ori $?a Bici false CosteTotal ?cost $?b )
-	?n <- ( Nodo Letra ?ori Tipo bicicleta $?)
+	( Recorrido Actual ?ori $?a Bici false CosteTotal ?cost $?b )
+	( Nodo Letra ?ori Tipo bicicleta $?)
 =>
 	(assert (Recorrido Actual ?ori $?a Bici true CosteTotal (+ ?cost 1) $?b))
 )
 
 (defrule dejarBici
 (declare (salience 40))
-	?r <- ( Recorrido Actual ?ori $?a Bici true CosteTotal ?cost $?b )
-	?n <- ( Nodo Letra ?ori Tipo bicicleta $?)
+	( Recorrido Actual ?ori $?a Bici true CosteTotal ?cost $?b )
+	( Nodo Letra ?ori Tipo bicicleta $?)
 =>
 	(assert (Recorrido Actual ?ori $?a Bici false CosteTotal (+ ?cost 1) $?b))
 )
 
 (defrule parada
 (declare (salience 100))
-	?r <- ( Recorrido Actual ?act Destino ?act Bici false CosteTotal ?cost Nivel ?n )
+	( Recorrido Actual ?act Destino ?act Bici false CosteTotal ?cost Nivel ?n )
 =>
 	(printout t "LLEGO AL FINALCON COSTE  " ?cost crlf)
 	(printout t "SOLUCION ENCONTRADA EN EL NIVEL " ?n crlf)
 	(printout t "NUMERO DE NODOS EXPANDIDOS O REGLAS DISPARADAS " ?*nod-gen* crlf)
 	(halt)
+)
+
+; falta hacer q no llegue al ultimo nodo en bici
+
+(deffunction inicio ()
+    (reset)
+	(printout t "Profundidad Maxima:= " )
+	(bind ?prof (read))
+	(printout t "Tipo de Busqueda " crlf "    1.- Anchura" crlf "    2.- Profundidad" crlf )
+	(bind ?a (read))
+	(if (= ?a 1)
+	       then    (set-strategy breadth)
+	       else   (set-strategy depth))
+    (printout t " Ejecuta run para poner en marcha el programa " crlf)
+	(assert (profundidad-maxima ?prof))
 )
