@@ -1,5 +1,5 @@
 
-(defglobal ?*f* = 50)
+(defglobal ?*nod-gen* = 0)
 (deffacts Grafo
 	( Camino Origen a Destino b Coste 10 Tipo ambos )
 	( Camino Origen a Destino c Coste 8 Tipo pie )
@@ -81,23 +81,17 @@
 	
  => 
 	(assert(Recorrido Actual ?d Destino ?dest Bici false CosteTotal (+ ?costet ?coste) Nivel (+ ?n 1)))
+	(bind ?*nod-gen* (+ ?*nod-gen* 1))
 )
-
-;Ir en bicicleta: acción para desplazarse en bicicleta de un punto a otro contiguo que
-;se encuentran conectados por un camino apto para ir en bicicleta. El coste de esta
-;operación será la mitad del indicado por el camino (división entera por 2).g 
 
 (defrule BiciXaY
 	(declare (salience 90))
 	?r <- ( Recorrido Actual ?ori Destino ?dest Bici true CosteTotal ?costet Nivel ?n )
 	?c1 <- ( Camino Origen ?ori Destino ?d Coste ?coste Tipo ambos )
 =>
-	(assert(Recorrido Actual ?d Destino ?dest Bici true CosteTotal (+ ?costet (/ ?coste 2)) Nivel (+ ?n 1)))	
+	(assert(Recorrido Actual ?d Destino ?dest Bici true CosteTotal (+ ?costet (/ ?coste 2)) Nivel (+ ?n 1)))
+	(bind ?*nod-gen* (+ ?*nod-gen* 1))
 )
-
-
-;3) Coger bici: acción que permite coger una bici en uno de los puntos marcados como
-;base (si no lleva ya bici). El coste será 1.
 
 (defrule cogerBici
 (declare (salience 50))
@@ -107,9 +101,6 @@
 	(assert (Recorrido Actual ?ori $?a Bici true CosteTotal (+ ?cost 1) $?b))
 )
 
-;4) Dejar bici: acción que permite dejar una bici en uno de los puntos marcados como
-;base (solo si lleva bici). El coste será 1.
-
 (defrule dejarBici
 (declare (salience 40))
 	?r <- ( Recorrido Actual ?ori $?a Bici true CosteTotal ?cost $?b )
@@ -118,13 +109,12 @@
 	(assert (Recorrido Actual ?ori $?a Bici false CosteTotal (+ ?cost 1) $?b))
 )
 
-
-;5) Parada: acción para detectar que se ha llegado al destino y no está montado en
-;bici. 
 (defrule parada
 (declare (salience 100))
-	?r <- ( Recorrido Actual ?act Destino ?act Bici false CosteTotal ?cost $?b )
+	?r <- ( Recorrido Actual ?act Destino ?act Bici false CosteTotal ?cost Nivel ?n )
 =>
-	(printout t "Llego al final con coste " ?cost)
+	(printout t "LLEGO AL FINALCON COSTE  " ?cost crlf)
+	(printout t "SOLUCION ENCONTRADA EN EL NIVEL " ?n crlf)
+	(printout t "NUMERO DE NODOS EXPANDIDOS O REGLAS DISPARADAS " ?*nod-gen* crlf)
 	(halt)
 )
