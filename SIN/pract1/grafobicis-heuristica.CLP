@@ -1,5 +1,6 @@
 
 (defglobal ?*nod-gen* = 0)
+(defglobal ?*f* = 0)
 
 (deffacts Grafo
 	( Camino Origen a Destino b Coste 10 Tipo ambos )
@@ -76,11 +77,16 @@
 )
 
 (defrule PieXaY
-	(declare (salience 70))
+	(declare (salience (- 0 ?*f*)))
 	(Recorrido Actual ?ori Destino ?dest Bici false CosteTotal ?costet Nivel ?n)
 	(Camino Origen ?ori Destino ?d Coste ?coste Tipo ?t)
 	(profundidad-maxima ?prof)
+
+	( Nodo Letra ?ori $?algo Barrio ?level1 )
+	( Nodo Letra ?dest $?algo2 Barrio ?level2 )
+
 	(test (< ?n ?prof))
+	(test (control (+ ?costet ?coste) ?level1 ?level2 ?min NO ?flag))
  => 
 	(assert(Recorrido Actual ?d Destino ?dest Bici false CosteTotal (+ ?costet ?coste) Nivel (+ ?n 1)))
 	(bind ?*nod-gen* (+ ?*nod-gen* 1))
@@ -136,4 +142,17 @@
 	       else   (set-strategy depth))
     (printout t " Ejecuta run para poner en marcha el programa " crlf)
 	(assert (profundidad-maxima ?prof))
+)
+
+; h(n)=|DistBarrios(n)|*min(Cam(n))*Sit(n) 
+(deffunction control (?c ?b1 ?b2 ?min ?bici ?flag)
+	(bind ?*f* (heuristica ?b1 ?b2 ?min ?bici ?flag))
+	(bind ?*f* (+ ?*f* ?c))
+	(bind ?*f* (div ?*f* 1))
+)
+
+(deffunction heuristica (?b1 ?b2 ?min ?bici ?flag)
+	;minCam: min camino que sale del nodo
+    ;DistBarrios: diferencia entre barrios siendo minimo el 1
+    ; Sit: 0.5 si es base bici bici o 1 sino
 )

@@ -10,7 +10,7 @@ var server = net.createServer(
             });
         c.on('data',
             function (data) {
-                Respueta = '{ip:'+data.ip+',carga:"'+getLoad()+'"}'; // construye la respuesta
+                Respueta = '{ip:'+JSON.parse(data).ip+',carga:"'+getLoad()+'"}'; // construye la respuesta
                 c.write(Respuesta); // envía la respuesta
                 c.end(); // close socket
             });
