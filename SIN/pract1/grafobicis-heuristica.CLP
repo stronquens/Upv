@@ -2,6 +2,11 @@
 (defglobal ?*nod-gen* = 0)
 (defglobal ?*f* = 0)
 
+;; =========================================================
+;; ===                   HECHOS                           ==
+;; =========================================================
+
+
 (deffacts Grafo
 	( Camino Origen a Destino b Coste 10 Tipo ambos )
 	( Camino Origen a Destino c Coste 8 Tipo pie )
@@ -72,9 +77,64 @@
 	( Nodo Letra q Tipo normal Barrio 5 )
 
 	( Nodo Letra r Tipo bicicleta Barrio 6 )
+
+	(arco_min a 10)
+	(arco_min b 5)
+	(arco_min c 5)
+	(arco_min d 6)
+	(arco_min e 9)
+	(arco_min f 6)
+	(arco_min g 6)
+	(arco_min h 6)
+	(arco_min i 2)
+	(arco_min j 7)
+	(arco_min k 2)
+	(arco_min l 2)
+	(arco_min m 2)
+	(arco_min n 6)
+	(arco_min o 2)
+	(arco_min p 2)
+	(arco_min q 2)
+	(arco_min r 3)
 	
 	( Recorrido Actual a Destino b Bici false CosteTotal 0 Nivel 0)
 )
+
+;; =========================================================
+;; ===              H E U R I S T I C A                   ==
+;; =========================================================
+
+; h(n)=|DistBarrios(n)|*min(Cam(n))*Sit(n) 
+(deffunction heuristica (?bar1 ?bar2 ?min ?bici ?flag)
+	(bind ?bar (abs (- ?bar1 ?bar2)))
+	(if (eq ?bar 0) then (bind ?bar (+ ?bar 1)))
+	(bind ?sit (if (or (eq ?bici true) (eq ?flag bicicleta)) then 0.5 else 1)
+	(return (* (* ?bar ?min) ?sit))
+)
+
+(deffunction control (?c ?bar1 ?bar2 ?min ?bici ?flag)
+	(bind ?*f* (heuristica ?bar1 ?bar2 ?min ?bici ?flag))
+	(bind ?*f* (+ ?*f* ?c))
+	(bind ?*f* (div ?*f* 1))
+)
+
+; =========================   Iniciar programa con (inicio) ================= 
+(deffunction inicio ()
+    (reset)
+	(printout t "Profundidad Maxima:= " )
+	(bind ?prof (read))
+	(printout t "Tipo de Busqueda " crlf "    1.- Anchura" crlf "    2.- Profundidad" crlf )
+	(bind ?a (read))
+	(if (= ?a 1)
+	       then    (set-strategy breadth)
+	       else   (set-strategy depth))
+    (printout t " Ejecuta run para poner en marcha el programa " crlf)
+	(assert (profundidad-maxima ?prof))
+)
+
+;; =========================================================
+;; ===                       Reglas                       ==
+;; =========================================================
 
 (defrule PieXaY
 	(declare (salience (- 0 ?*f*)))
@@ -82,11 +142,12 @@
 	(Camino Origen ?ori Destino ?d Coste ?coste Tipo ?t)
 	(profundidad-maxima ?prof)
 
-	( Nodo Letra ?ori $?algo Barrio ?level1 )
+	( Nodo Letra ?ori Tipo ?flag Barrio ?level1 )
 	( Nodo Letra ?dest $?algo2 Barrio ?level2 )
+	(arco_min ?ori ?min)
 
 	(test (< ?n ?prof))
-	(test (control (+ ?costet ?coste) ?level1 ?level2 ?min NO ?flag))
+	(test (control (+ ?costet ?coste) ?level1 ?level2 ?min false ?flag))
  => 
 	(assert(Recorrido Actual ?d Destino ?dest Bici false CosteTotal (+ ?costet ?coste) Nivel (+ ?n 1)))
 	(bind ?*nod-gen* (+ ?*nod-gen* 1))
@@ -130,29 +191,3 @@
 )
 
 ; falta hacer q no llegue al ultimo nodo en bici
-
-(deffunction inicio ()
-    (reset)
-	(printout t "Profundidad Maxima:= " )
-	(bind ?prof (read))
-	(printout t "Tipo de Busqueda " crlf "    1.- Anchura" crlf "    2.- Profundidad" crlf )
-	(bind ?a (read))
-	(if (= ?a 1)
-	       then    (set-strategy breadth)
-	       else   (set-strategy depth))
-    (printout t " Ejecuta run para poner en marcha el programa " crlf)
-	(assert (profundidad-maxima ?prof))
-)
-
-; h(n)=|DistBarrios(n)|*min(Cam(n))*Sit(n) 
-(deffunction control (?c ?b1 ?b2 ?min ?bici ?flag)
-	(bind ?*f* (heuristica ?b1 ?b2 ?min ?bici ?flag))
-	(bind ?*f* (+ ?*f* ?c))
-	(bind ?*f* (div ?*f* 1))
-)
-
-(deffunction heuristica (?b1 ?b2 ?min ?bici ?flag)
-	;minCam: min camino que sale del nodo
-    ;DistBarrios: diferencia entre barrios siendo minimo el 1
-    ; Sit: 0.5 si es base bici bici o 1 sino
-)

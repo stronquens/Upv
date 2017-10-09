@@ -2,7 +2,8 @@ var net = require('net');
 
 //var args = process.argv.slice(2, process.argv.length); 
 if (process.argv.length<4){
-    return "Error need more arguments"
+    console.log("Error need more arguments");
+    return;
 }
 var LOCAL_PORT = 8001;
 var LOCAL_IP = '127.0.0.1';
