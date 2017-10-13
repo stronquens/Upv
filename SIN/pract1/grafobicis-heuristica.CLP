@@ -54,10 +54,10 @@
 	( Camino Origen q Destino r Coste 3 Tipo pie)
 	
 	
-	( Nodo Letra a Tipo normal Barrio 1 )
+	( Nodo Letra a Tipo bicicleta Barrio 1 )
 	
 	( Nodo Letra b Tipo bicicleta Barrio 2 )
-	( Nodo Letra b Tipo bicicleta Barrio 2 )
+	( Nodo Letra c Tipo normal Barrio 2 )
 	( Nodo Letra d Tipo normal Barrio 2 )
 	( Nodo Letra e Tipo normal Barrio 2 )
 	( Nodo Letra j Tipo bicicleta Barrio 2 )
@@ -106,16 +106,16 @@
 
 ; h(n)=|DistBarrios(n)|*min(Cam(n))*Sit(n) 
 (deffunction heuristica (?bar1 ?bar2 ?min ?bici ?flag)
-	(bind ?bar (abs (- ?bar1 ?bar2)))
+	(bind ?bar (abs (- ?bar1 ?bar2))) 					;|DistBarrios(n)|
 	(if (eq ?bar 0) then (bind ?bar (+ ?bar 1)))
-	(bind ?sit (if (or (eq ?bici true) (eq ?flag bicicleta)) then 0.5 else 1)
-	(return (* (* ?bar ?min) ?sit))
+	(bind ?sit (if (or (eq ?bici true) (eq ?flag bicicleta)) then 0.5 else 1) ; Sit(n) 
+	(return (* (* ?bar ?min) ?sit)) 					;|DistBarrios(n)|*min(Cam(n))*Sit(n) 
 )
 
 (deffunction control (?c ?bar1 ?bar2 ?min ?bici ?flag)
 	(bind ?*f* (heuristica ?bar1 ?bar2 ?min ?bici ?flag))
 	(bind ?*f* (+ ?*f* ?c))
-	(bind ?*f* (div ?*f* 1))
+	(bind ?*f* (div ?*f* 1)) ; ????
 )
 
 ; =========================   Iniciar programa con (inicio) ================= 

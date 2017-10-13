@@ -72,7 +72,7 @@
 
 	( Nodo Letra r Tipo bicicleta Barrio 6 )
 	
-	( Recorrido Actual a Destino b Bici false CosteTotal 0 Nivel 0)
+	( Recorrido Actual a Destino r Bici false CosteTotal 0 Nivel 0)
 )
 
 (defrule PieXaY
@@ -92,6 +92,7 @@
 	( Camino Origen ?ori Destino ?d Coste ?coste Tipo ambos )
 	(profundidad-maxima ?prof)
 	(test (< ?n ?prof))
+	(test (neq ?dest ?d)) ; No puede llegar en bici al destino
 =>
 	(assert(Recorrido Actual ?d Destino ?dest Bici true CosteTotal (+ ?costet (/ ?coste 2)) Nivel (+ ?n 1)))
 	(bind ?*nod-gen* (+ ?*nod-gen* 1))
