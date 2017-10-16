@@ -14,8 +14,8 @@ if (process.argv.length == 6) {
 }
 
 var client = net.connect({
-        port: PUERTO_proxy,
-        host: IP_proxy
+        port: 8000,
+        host: '127.0.0.1'
     },
     function () { //connect listener
         console.log('client connected');

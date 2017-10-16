@@ -35,27 +35,61 @@ var dirs = {
     }
 };
 
-for (var k in dirs) {
-    console.log('var port ' + k + ' value ' + dirs[k].ip);
+//for (var k in dirs) {
+    //console.log('var port ' + k + ' value ' + dirs[k].ip);
 
-    net.createServer(function (socket) { // cliente original
-        var serviceSocket = new net.Socket(); // servidor remoto
-        console.log('Connected to ' + dirs[k].port + ' value ' + dirs[k].ip);
-        serviceSocket.connect(
-            dirs[k].port,
-            dirs[k].ip,
+var server1 = net.createServer(function (socket) { // cliente original
+        var serviceSocket1 = new net.Socket(); // servidor remoto
+        console.log('Connected to ' + dirs[8001].port + ' value ' + dirs[8001].ip);
+        serviceSocket1.connect(
+            dirs[8001].port,
+            dirs[8001].ip,
             function () { // Cliente original
                 socket.on('data', function (msg) {
-                    serviceSocket.write(msg);
+                    serviceSocket1.write(msg);
                 });
-                serviceSocket.on('data', function (data) {
+                serviceSocket1.on('data', function (data) {
                     socket.write(data);
                 });
             }
         );
-    }).listen(k, '127.0.0.1');
+    }).listen(8001, '127.0.0.1');
 
-}
+    var server2 = net.createServer(function (socket) { // cliente original
+        var serviceSocket2 = new net.Socket(); // servidor remoto
+        console.log('Connected to ' + dirs[8002].port + ' value ' + dirs[8002].ip);
+        serviceSocket2.connect(
+            dirs[8002].port,
+            dirs[8002].ip,
+            function () { // Cliente original
+                socket.on('data', function (msg) {
+                    serviceSocket2.write(msg);
+                });
+                serviceSocket2.on('data', function (data) {
+                    socket.write(data);
+                });
+            }
+        );
+    }).listen(8002, '127.0.0.1');
+
+    var server3 = net.createServer(function (socket) { // cliente original
+        var serviceSocket3 = new net.Socket(); // servidor remoto
+        console.log('Connected to ' + dirs[8003].port + ' value ' + dirs[8003].ip);
+        serviceSocket3.connect(
+            dirs[8003].port,
+            dirs[8003].ip,
+            function () { // Cliente original
+                socket.on('data', function (msg) {
+                    serviceSocket3.write(msg);
+                });
+                serviceSocket3.on('data', function (data) {
+                    socket.write(data);
+                });
+            }
+        );
+    }).listen(8003, '127.0.0.1');
+
+//}
 
 var serverControlador = net.createServer(function (prog) { // cliente original
     console.log('server: client connected');

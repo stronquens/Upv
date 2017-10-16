@@ -106,19 +106,20 @@
 
 ; h(n)=|DistBarrios(n)|*min(Cam(n))*Sit(n) 
 (deffunction heuristica (?bar1 ?bar2 ?min ?bici ?flag)
-	(bind ?bar (abs (- ?bar1 ?bar2))) 					;|DistBarrios(n)|
+	(bind ?bar (abs (- ?bar1 ?bar2))) 												;|DistBarrios(n)|
 	(if (eq ?bar 0) then (bind ?bar (+ ?bar 1)))
-	(bind ?sit (if (or (eq ?bici true) (eq ?flag bicicleta)) then 0.5 else 1) ; Sit(n) 
-	(return (* (* ?bar ?min) ?sit)) 					;|DistBarrios(n)|*min(Cam(n))*Sit(n) 
+	(bind ?sit (if (or (eq ?bici true) (eq ?flag bicicleta)) then 0.5 else 1)) 		;Sit(n) 
+	(bind ?mult (* (* ?bar ?min) ?sit))
+	(return ?mult) 																	;|DistBarrios(n)|*min(Cam(n))*Sit(n) 
 )
 
 (deffunction control (?c ?bar1 ?bar2 ?min ?bici ?flag)
 	(bind ?*f* (heuristica ?bar1 ?bar2 ?min ?bici ?flag))
 	(bind ?*f* (+ ?*f* ?c))
-	(bind ?*f* (div ?*f* 1)) ; ????
+	(bind ?*f* (div ?*f* 1)) 										; ????
 )
 
-; =========================   Iniciar programa con (inicio) ================= 
+; =========================   Iniciar programa con (inicio) problemas en mac ================= 
 (deffunction inicio ()
     (reset)
 	(printout t "Profundidad Maxima:= " )
@@ -137,7 +138,7 @@
 ;; =========================================================
 
 (defrule PieXaY
-	(declare (salience (- 0 ?*f*)))
+	(declare (salience (- 2 ?*f*)))
 	(Recorrido Actual ?ori Destino ?dest Bici false CosteTotal ?costet Nivel ?n)
 	(Camino Origen ?ori Destino ?d Coste ?coste Tipo ?t)
 	(profundidad-maxima ?prof)
@@ -154,18 +155,24 @@
 )
 
 (defrule BiciXaY
-	(declare (salience 90))
+	(declare (salience (- 1 ?*f*)))
 	( Recorrido Actual ?ori Destino ?dest Bici true CosteTotal ?costet Nivel ?n )
 	( Camino Origen ?ori Destino ?d Coste ?coste Tipo ambos )
 	(profundidad-maxima ?prof)
+
+	( Nodo Letra ?ori Tipo ?flag Barrio ?level1 )
+	( Nodo Letra ?dest $?algo2 Barrio ?level2 )
+	(arco_min ?ori ?min)
+
 	(test (< ?n ?prof))
+	(test (control (+ ?costet ?coste) ?level1 ?level2 ?min true ?flag))	
 =>
 	(assert(Recorrido Actual ?d Destino ?dest Bici true CosteTotal (+ ?costet (/ ?coste 2)) Nivel (+ ?n 1)))
 	(bind ?*nod-gen* (+ ?*nod-gen* 1))
 )
 
 (defrule cogerBici
-(declare (salience 50))
+	(declare (salience (- 3 ?*f*)))
 	( Recorrido Actual ?ori $?a Bici false CosteTotal ?cost $?b )
 	( Nodo Letra ?ori Tipo bicicleta $?)
 =>
@@ -173,7 +180,7 @@
 )
 
 (defrule dejarBici
-(declare (salience 40))
+	(declare (salience (- 4 ?*f*)))
 	( Recorrido Actual ?ori $?a Bici true CosteTotal ?cost $?b )
 	( Nodo Letra ?ori Tipo bicicleta $?)
 =>
@@ -181,7 +188,7 @@
 )
 
 (defrule parada
-(declare (salience 100))
+	(declare (salience (- 0 ?*f*)))
 	( Recorrido Actual ?act Destino ?act Bici false CosteTotal ?cost Nivel ?n )
 =>
 	(printout t "LLEGO AL FINALCON COSTE  " ?cost crlf)

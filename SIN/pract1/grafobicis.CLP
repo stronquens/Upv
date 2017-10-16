@@ -48,10 +48,10 @@
 	( Camino Origen q Destino r Coste 3 Tipo pie)
 	
 	
-	( Nodo Letra a Tipo normal Barrio 1 )
+	( Nodo Letra a Tipo bicicleta Barrio 1 )
 	
 	( Nodo Letra b Tipo bicicleta Barrio 2 )
-	( Nodo Letra b Tipo bicicleta Barrio 2 )
+	( Nodo Letra c Tipo normal Barrio 2 )
 	( Nodo Letra d Tipo normal Barrio 2 )
 	( Nodo Letra e Tipo normal Barrio 2 )
 	( Nodo Letra j Tipo bicicleta Barrio 2 )
