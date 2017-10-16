@@ -155,7 +155,7 @@
 )
 
 (defrule BiciXaY
-	(declare (salience (- 1 ?*f*)))
+	(declare (salience (- 3 ?*f*)))
 	( Recorrido Actual ?ori Destino ?dest Bici true CosteTotal ?costet Nivel ?n )
 	( Camino Origen ?ori Destino ?d Coste ?coste Tipo ambos )
 	(profundidad-maxima ?prof)
@@ -172,7 +172,7 @@
 )
 
 (defrule cogerBici
-	(declare (salience (- 3 ?*f*)))
+	(declare (salience (- 1 ?*f*)))
 	( Recorrido Actual ?ori $?a Bici false CosteTotal ?cost $?b )
 	( Nodo Letra ?ori Tipo bicicleta $?)
 =>
@@ -180,7 +180,7 @@
 )
 
 (defrule dejarBici
-	(declare (salience (- 4 ?*f*)))
+	(declare (salience (- 0 ?*f*)))
 	( Recorrido Actual ?ori $?a Bici true CosteTotal ?cost $?b )
 	( Nodo Letra ?ori Tipo bicicleta $?)
 =>
@@ -188,7 +188,7 @@
 )
 
 (defrule parada
-	(declare (salience (- 0 ?*f*)))
+	(declare (salience (- 4 ?*f*)))
 	( Recorrido Actual ?act Destino ?act Bici false CosteTotal ?cost Nivel ?n )
 =>
 	(printout t "LLEGO AL FINALCON COSTE  " ?cost crlf)
