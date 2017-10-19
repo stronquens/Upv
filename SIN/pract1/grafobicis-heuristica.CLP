@@ -12,27 +12,38 @@
 	( Camino Origen a Destino c Coste 8 Tipo pie )
 	( Camino Origen a Destino e Coste 10 Tipo ambos )
 
+	( Camino Origen b Destino a Coste 10 Tipo ambos)
+	( Camino Origen b Destino c Coste 5 Tipo pie)	
 	( Camino Origen b Destino f Coste 6 Tipo pie)
-	( Camino Origen b Destino c Coste 5 Tipo pie)
 	
+	( Camino Origen c Destino a Coste 8 Tipo pie)
+	( Camino Origen c Destino b Coste 5 Tipo pie)
+	( Camino Origen c Destino d Coste 6 Tipo pie)	
 	( Camino Origen c Destino g Coste 6 Tipo pie)
 	( Camino Origen c Destino h Coste 6 Tipo pie)
-	( Camino Origen c Destino d Coste 14 Tipo pie)
 	
+	( Camino Origen d Destino c Coste 6 Tipo pie)
 	( Camino Origen d Destino h Coste 14 Tipo ambos)
 	
+	( Camino Origen e Destino a Coste 10 Tipo ambos)	
 	( Camino Origen e Destino i Coste 20 Tipo pie)
 	( Camino Origen e Destino j Coste 9 Tipo ambos)
 	
+	( Camino Origen f Destino b Coste 6 Tipo pie)	
 	( Camino Origen f Destino k Coste 10 Tipo pie)
 	( Camino Origen f Destino l Coste 6 Tipo pie)
 	
+	( Camino Origen g Destino c Coste 6 Tipo pie)	
+	( Camino Origen g Destino h Coste 8 Tipo pie)	
 	( Camino Origen g Destino l Coste 9 Tipo pie)
 	( Camino Origen g Destino m Coste 12 Tipo pie)
-	( Camino Origen g Destino h Coste 8 Tipo pie)
 	
+	( Camino Origen h Destino d Coste 14 Tipo ambos)
+	( Camino Origen h Destino g Coste 8 Tipo pie)
 	( Camino Origen h Destino i Coste 12 Tipo ambos)
 	
+	( Camino Origen i Destino e Coste 20 Tipo pie)
+	( Camino Origen i Destino h Coste 12 Tipo ambos)
 	( Camino Origen i Destino o Coste 2 Tipo pie)
 	
 	( Camino Origen j Destino o Coste 7 Tipo ambos)
@@ -105,6 +116,7 @@
 ;; =========================================================
 
 ; h(n)=|DistBarrios(n)|*min(Cam(n))*Sit(n) 
+
 (deffunction heuristica (?bar1 ?bar2 ?min ?bici ?flag)
 	(bind ?bar (abs (- ?bar1 ?bar2))) 												;|DistBarrios(n)|
 	(if (eq ?bar 0) then (bind ?bar (+ ?bar 1)))
@@ -116,7 +128,7 @@
 (deffunction control (?c ?bar1 ?bar2 ?min ?bici ?flag)
 	(bind ?*f* (heuristica ?bar1 ?bar2 ?min ?bici ?flag))
 	(bind ?*f* (+ ?*f* ?c))
-	(bind ?*f* (div ?*f* 1)) 										; ????
+	(bind ?*f* (div ?*f* 1)) 	; redondear entero
 )
 
 ; =========================   Iniciar programa con (inicio) problemas en mac ================= 
@@ -131,6 +143,8 @@
 	       else   (set-strategy depth))
     (printout t " Ejecuta run para poner en marcha el programa " crlf)
 	(assert (profundidad-maxima ?prof))
+	(set-salience-evaluation when-activated)
+	;(run)
 )
 
 ;; =========================================================
@@ -138,7 +152,7 @@
 ;; =========================================================
 
 (defrule PieXaY
-	(declare (salience (- 2 ?*f*)))
+	(declare (salience (- 0 ?*f*)))
 	(Recorrido Actual ?ori Destino ?dest Bici false CosteTotal ?costet Nivel ?n)
 	(Camino Origen ?ori Destino ?d Coste ?coste Tipo ?t)
 	(profundidad-maxima ?prof)
@@ -155,7 +169,7 @@
 )
 
 (defrule BiciXaY
-	(declare (salience (- 3 ?*f*)))
+	(declare (salience (- 0 ?*f*)))
 	( Recorrido Actual ?ori Destino ?dest Bici true CosteTotal ?costet Nivel ?n )
 	( Camino Origen ?ori Destino ?d Coste ?coste Tipo ambos )
 	(profundidad-maxima ?prof)
@@ -165,36 +179,58 @@
 	(arco_min ?ori ?min)
 
 	(test (< ?n ?prof))
-	(test (control (+ ?costet ?coste) ?level1 ?level2 ?min true ?flag))	
+	(test (neq ?d ?dest))
+	(test (control (+ ?costet (/ ?coste 2)) ?level1 ?level2 ?min true ?flag))	
 =>
 	(assert(Recorrido Actual ?d Destino ?dest Bici true CosteTotal (+ ?costet (/ ?coste 2)) Nivel (+ ?n 1)))
 	(bind ?*nod-gen* (+ ?*nod-gen* 1))
 )
 
-(defrule cogerBici
-	(declare (salience (- 1 ?*f*)))
-	( Recorrido Actual ?ori $?a Bici false CosteTotal ?cost $?b )
-	( Nodo Letra ?ori Tipo bicicleta $?)
-=>
-	(assert (Recorrido Actual ?ori $?a Bici true CosteTotal (+ ?cost 1) $?b))
-)
-
 (defrule dejarBici
 	(declare (salience (- 0 ?*f*)))
-	( Recorrido Actual ?ori $?a Bici true CosteTotal ?cost $?b )
+	( Recorrido Actual ?ori Destino ?dest Bici true CosteTotal ?costet Nivel ?n )
 	( Nodo Letra ?ori Tipo bicicleta $?)
+	(profundidad-maxima ?prof)
+
+	( Nodo Letra ?ori Tipo ?flag Barrio ?level1 )
+	( Nodo Letra ?dest $?algo2 Barrio ?level2 )
+	(arco_min ?ori ?min)
+	
+	(test (< ?n ?prof))
+	(test (control (+ ?costet 1) ?level1 ?level2 ?min true ?flag))	
 =>
-	(assert (Recorrido Actual ?ori $?a Bici false CosteTotal (+ ?cost 1) $?b))
+	(assert (Recorrido Actual ?ori Destino ?dest Bici true CosteTotal (+ ?costet 1) Nivel (+ ?n 1)))
+	(bind ?*nod-gen* (+ ?*nod-gen* 1))
+)
+
+(defrule cogerBici
+	(declare (salience (- 0 ?*f*)))
+	( Recorrido Actual ?ori Destino ?dest Bici false CosteTotal ?costet Nivel ?n )
+	( Nodo Letra ?ori Tipo bicicleta $?)
+	(profundidad-maxima ?prof)
+
+	( Nodo Letra ?ori Tipo ?flag Barrio ?level1 )
+	( Nodo Letra ?dest $?algo2 Barrio ?level2 )
+	(arco_min ?ori ?min)
+	
+	(test (< ?n ?prof))
+	(test (control (+ ?costet 1) ?level1 ?level2 ?min false ?flag))	
+=>
+	(assert (Recorrido Actual ?ori Destino ?dest Bici true CosteTotal (+ ?costet 1) Nivel (+ ?n 1)))
+	(bind ?*nod-gen* (+ ?*nod-gen* 1))
 )
 
 (defrule parada
-	(declare (salience (- 4 ?*f*)))
-	( Recorrido Actual ?act Destino ?act Bici false CosteTotal ?cost Nivel ?n )
+	(declare (salience (- 0 ?*f*)))
+	( Recorrido Actual ?act Destino ?act Bici false CosteTotal ?costet Nivel ?n )
+	
+	( Nodo Letra ?act Tipo ?flag Barrio ?level1 )
+	(arco_min ?act ?min)
+	
+	(test (control ?costet ?level1 ?level1 ?min false ?flag))	
 =>
-	(printout t "LLEGO AL FINALCON COSTE  " ?cost crlf)
+	(printout t "LLEGO AL FINALCON COSTE  " ?costet crlf)
 	(printout t "SOLUCION ENCONTRADA EN EL NIVEL " ?n crlf)
 	(printout t "NUMERO DE NODOS EXPANDIDOS O REGLAS DISPARADAS " ?*nod-gen* crlf)
 	(halt)
 )
-
-; falta hacer q no llegue al ultimo nodo en bici
