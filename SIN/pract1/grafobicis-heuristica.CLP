@@ -41,29 +41,46 @@
 	( Camino Origen h Destino d Coste 14 Tipo ambos)
 	( Camino Origen h Destino g Coste 8 Tipo pie)
 	( Camino Origen h Destino i Coste 12 Tipo ambos)
+	( Camino Origen h Destino c Coste 6 Tipo pie)
 	
 	( Camino Origen i Destino e Coste 20 Tipo pie)
 	( Camino Origen i Destino h Coste 12 Tipo ambos)
 	( Camino Origen i Destino o Coste 2 Tipo pie)
 	
 	( Camino Origen j Destino o Coste 7 Tipo ambos)
+	( Camino Origen j Destino e Coste 9 Tipo ambos)
 	
 	( Camino Origen k Destino l Coste 2 Tipo ambos)
+	( Camino Origen k Destino f Coste 10 Tipo pie)
 	
 	( Camino Origen l Destino p Coste 6 Tipo ambos)
 	( Camino Origen l Destino m Coste 7 Tipo ambos)
+	( Camino Origen l Destino g Coste 9 Tipo pie)
+	( Camino Origen l Destino k Coste 2 Tipo ambos)
+	( Camino Origen l Destino f Coste 6 Tipo pie)
 	
 	( Camino Origen m Destino q Coste 2 Tipo pie)
+	( Camino Origen m Destino g Coste 12 Tipo pie)
+	( Camino Origen m Destino l Coste 7 Tipo ambos)
 	
 	( Camino Origen n Destino q Coste 6 Tipo pie)
+	( Camino Origen n Destino o Coste 8 Tipo ambos)
 	
 	( Camino Origen o Destino n Coste 8 Tipo ambos)
+	( Camino Origen o Destino j Coste 9 Tipo ambos)
+	( Camino Origen o Destino i Coste 2 Tipo pie)
 	
 	( Camino Origen p Destino r Coste 4 Tipo ambos)
 	( Camino Origen p Destino q Coste 3 Tipo pie)
+	( Camino Origen p Destino l Coste 6 Tipo ambos)
 	
 	( Camino Origen q Destino r Coste 3 Tipo pie)
-	
+	( Camino Origen q Destino m Coste 2 Tipo pie)
+	( Camino Origen q Destino n Coste 6 Tipo pie)
+	( Camino Origen q Destino p Coste 2 Tipo pie)
+
+	( Camino Origen r Destino p Coste 4 Tipo ambos)
+	( Camino Origen r Destino q Coste 3 Tipo pie)
 	
 	( Nodo Letra a Tipo bicicleta Barrio 1 )
 	
