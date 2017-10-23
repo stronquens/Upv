@@ -25,7 +25,7 @@
 	( Camino Origen d Destino c Coste 6 Tipo pie)
 	( Camino Origen d Destino h Coste 14 Tipo ambos)
 	
-	( Camino Origen e Destino a Coste 10 Tipo ambos)	
+	( Camino Origen e Destino a Coste 10 Tipo ambos)
 	( Camino Origen e Destino i Coste 20 Tipo pie)
 	( Camino Origen e Destino j Coste 9 Tipo ambos)
 	
@@ -125,7 +125,7 @@
 	(arco_min q 2)
 	(arco_min r 3)
 	
-	( Recorrido Actual a Destino b Bici false CosteTotal 0 Nivel 0)
+	( Recorrido Actual a Destino r Bici false CosteTotal 0 Nivel 0)
 )
 
 ;; =========================================================
@@ -206,32 +206,30 @@
 (defrule dejarBici
 	(declare (salience (- 0 ?*f*)))
 	( Recorrido Actual ?ori Destino ?dest Bici true CosteTotal ?costet Nivel ?n )
-	( Nodo Letra ?ori Tipo bicicleta $?)
+	( Nodo Letra ?ori Tipo bicicleta Barrio ?level1)
 	(profundidad-maxima ?prof)
 
-	( Nodo Letra ?ori Tipo ?flag Barrio ?level1 )
 	( Nodo Letra ?dest $?algo2 Barrio ?level2 )
 	(arco_min ?ori ?min)
 	
 	(test (< ?n ?prof))
-	(test (control (+ ?costet 1) ?level1 ?level2 ?min true ?flag))	
+	(test (control (+ ?costet 1) ?level1 ?level2 ?min true bicicleta))	
 =>
-	(assert (Recorrido Actual ?ori Destino ?dest Bici true CosteTotal (+ ?costet 1) Nivel (+ ?n 1)))
+	(assert (Recorrido Actual ?ori Destino ?dest Bici false CosteTotal (+ ?costet 1) Nivel (+ ?n 1)))
 	(bind ?*nod-gen* (+ ?*nod-gen* 1))
 )
 
 (defrule cogerBici
 	(declare (salience (- 0 ?*f*)))
 	( Recorrido Actual ?ori Destino ?dest Bici false CosteTotal ?costet Nivel ?n )
-	( Nodo Letra ?ori Tipo bicicleta $?)
+	( Nodo Letra ?ori Tipo bicicleta Barrio ?level1)
 	(profundidad-maxima ?prof)
 
-	( Nodo Letra ?ori Tipo ?flag Barrio ?level1 )
 	( Nodo Letra ?dest $?algo2 Barrio ?level2 )
 	(arco_min ?ori ?min)
 	
 	(test (< ?n ?prof))
-	(test (control (+ ?costet 1) ?level1 ?level2 ?min false ?flag))	
+	(test (control (+ ?costet 1) ?level1 ?level2 ?min false bicileta))	
 =>
 	(assert (Recorrido Actual ?ori Destino ?dest Bici true CosteTotal (+ ?costet 1) Nivel (+ ?n 1)))
 	(bind ?*nod-gen* (+ ?*nod-gen* 1))

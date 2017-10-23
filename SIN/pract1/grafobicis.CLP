@@ -100,7 +100,7 @@
 
 	( Nodo Letra r Tipo bicicleta Barrio 6 )
 	
-	( Recorrido Actual a Destino r Bici false CosteTotal 0 Nivel 0)
+	( Recorrido Actual a Destino o Bici false CosteTotal 0 Nivel 0)
 )
 
 (defrule PieXaY
@@ -128,18 +128,24 @@
 
 (defrule cogerBici
 (declare (salience 50))
-	( Recorrido Actual ?ori $?a Bici false CosteTotal ?cost $?b )
+	( Recorrido Actual ?ori $?a Bici false CosteTotal ?cost Nivel ?n )
 	( Nodo Letra ?ori Tipo bicicleta $?)
+	(profundidad-maxima ?prof)
+	(test (< ?n ?prof))
 =>
-	(assert (Recorrido Actual ?ori $?a Bici true CosteTotal (+ ?cost 1) $?b))
+	(assert (Recorrido Actual ?ori $?a Bici true CosteTotal (+ ?cost 1) Nivel (+ ?n 1)))
+	(bind ?*nod-gen* (+ ?*nod-gen* 1))
 )
 
 (defrule dejarBici
 (declare (salience 40))
-	( Recorrido Actual ?ori $?a Bici true CosteTotal ?cost $?b )
+	( Recorrido Actual ?ori $?a Bici true CosteTotal ?cost Nivel ?n )
 	( Nodo Letra ?ori Tipo bicicleta $?)
+	(profundidad-maxima ?prof)
+	(test (< ?n ?prof))
 =>
-	(assert (Recorrido Actual ?ori $?a Bici false CosteTotal (+ ?cost 1) $?b))
+	(assert (Recorrido Actual ?ori $?a Bici false CosteTotal (+ ?cost 1) Nivel (+ ?n 1)))
+	(bind ?*nod-gen* (+ ?*nod-gen* 1))
 )
 
 (defrule parada
