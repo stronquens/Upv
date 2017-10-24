@@ -196,10 +196,10 @@
 	(arco_min ?ori ?min)
 
 	(test (< ?n ?prof))
-	(test (neq ?d ?dest))
-	(test (control (+ ?costet (/ ?coste 2)) ?level1 ?level2 ?min true ?flag))	
+	;(test (neq ?d ?dest))
+	(test (control (+ ?costet (div ?coste 2)) ?level1 ?level2 ?min true ?flag))	
 =>
-	(assert(Recorrido Actual ?d Destino ?dest Bici true CosteTotal (+ ?costet (/ ?coste 2)) Nivel (+ ?n 1)))
+	(assert(Recorrido Actual ?d Destino ?dest Bici true CosteTotal (+ ?costet (div ?coste 2)) Nivel (+ ?n 1)))
 	(bind ?*nod-gen* (+ ?*nod-gen* 1))
 )
 
@@ -229,7 +229,7 @@
 	(arco_min ?ori ?min)
 	
 	(test (< ?n ?prof))
-	(test (control (+ ?costet 1) ?level1 ?level2 ?min false bicileta))	
+	(test (control (+ ?costet 1) ?level1 ?level2 ?min false bicicleta))	
 =>
 	(assert (Recorrido Actual ?ori Destino ?dest Bici true CosteTotal (+ ?costet 1) Nivel (+ ?n 1)))
 	(bind ?*nod-gen* (+ ?*nod-gen* 1))

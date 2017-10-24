@@ -104,7 +104,7 @@
 )
 
 (defrule PieXaY
-	(declare (salience 70))
+	;(declare (salience 70))
 	(Recorrido Actual ?ori Destino ?dest Bici false CosteTotal ?costet Nivel ?n)
 	(Camino Origen ?ori Destino ?d Coste ?coste Tipo ?t)
 	(profundidad-maxima ?prof)
@@ -115,19 +115,19 @@
 )
 
 (defrule BiciXaY
-	(declare (salience 90))
+	;(declare (salience 90))
 	( Recorrido Actual ?ori Destino ?dest Bici true CosteTotal ?costet Nivel ?n )
 	( Camino Origen ?ori Destino ?d Coste ?coste Tipo ambos )
 	(profundidad-maxima ?prof)
 	(test (< ?n ?prof))
-	(test (neq ?dest ?d)) ; No puede llegar en bici al destino
+	;(test (neq ?dest ?d))
 =>
-	(assert(Recorrido Actual ?d Destino ?dest Bici true CosteTotal (+ ?costet (/ ?coste 2)) Nivel (+ ?n 1)))
+	(assert(Recorrido Actual ?d Destino ?dest Bici true CosteTotal (+ ?costet (div ?coste 2)) Nivel (+ ?n 1)))
 	(bind ?*nod-gen* (+ ?*nod-gen* 1))
 )
 
 (defrule cogerBici
-(declare (salience 50))
+	;(declare (salience 50))
 	( Recorrido Actual ?ori $?a Bici false CosteTotal ?cost Nivel ?n )
 	( Nodo Letra ?ori Tipo bicicleta $?)
 	(profundidad-maxima ?prof)
@@ -138,7 +138,7 @@
 )
 
 (defrule dejarBici
-(declare (salience 40))
+	;(declare (salience 40))
 	( Recorrido Actual ?ori $?a Bici true CosteTotal ?cost Nivel ?n )
 	( Nodo Letra ?ori Tipo bicicleta $?)
 	(profundidad-maxima ?prof)
@@ -149,7 +149,7 @@
 )
 
 (defrule parada
-(declare (salience 100))
+	(declare (salience 100))
 	( Recorrido Actual ?act Destino ?act Bici false CosteTotal ?cost Nivel ?n )
 =>
 	(printout t "LLEGO AL FINALCON COSTE  " ?cost crlf)
@@ -157,8 +157,6 @@
 	(printout t "NUMERO DE NODOS EXPANDIDOS O REGLAS DISPARADAS " ?*nod-gen* crlf)
 	(halt)
 )
-
-; falta hacer q no llegue al ultimo nodo en bici
 
 (deffunction inicio ()
     (reset)
