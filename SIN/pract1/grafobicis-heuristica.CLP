@@ -67,11 +67,11 @@
 	( Camino Origen n Destino o Coste 8 Tipo ambos)
 	
 	( Camino Origen o Destino n Coste 8 Tipo ambos)
-	( Camino Origen o Destino j Coste 9 Tipo ambos)
+	( Camino Origen o Destino j Coste 7 Tipo ambos)
 	( Camino Origen o Destino i Coste 2 Tipo pie)
 	
 	( Camino Origen p Destino r Coste 4 Tipo ambos)
-	( Camino Origen p Destino q Coste 3 Tipo pie)
+	( Camino Origen p Destino q Coste 2 Tipo pie)
 	( Camino Origen p Destino l Coste 6 Tipo ambos)
 	
 	( Camino Origen q Destino r Coste 3 Tipo pie)
@@ -91,7 +91,7 @@
 	( Nodo Letra j Tipo bicicleta Barrio 2 )
 	
 	( Nodo Letra f Tipo normal Barrio 3 )
-    ( Nodo Letra g Tipo normal Barrio 3 )
+    	( Nodo Letra g Tipo normal Barrio 3 )
 	( Nodo Letra h Tipo bicicleta Barrio 3 )
 	( Nodo Letra i Tipo normal Barrio 3 )
 	( Nodo Letra o Tipo normal Barrio 3 )
@@ -101,7 +101,7 @@
 	( Nodo Letra m Tipo bicicleta Barrio 4 )
 	( Nodo Letra n Tipo bicicleta Barrio 4 )
 
-    ( Nodo Letra p Tipo normal Barrio 5 )
+    	( Nodo Letra p Tipo normal Barrio 5 )
 	( Nodo Letra q Tipo normal Barrio 5 )
 
 	( Nodo Letra r Tipo bicicleta Barrio 6 )
