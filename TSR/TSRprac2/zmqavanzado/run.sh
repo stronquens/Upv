@@ -1,8 +1,8 @@
 #!/bin/bash
 
-node myworker_vp tcp://mi-IP-externa:8060 WORKER1 Ready DONE &
-node myworker_vp tcp://mi-IP-externa:8060 WORKER2 Ready OK &
-node mybroker_vp
+node mybroker_vp &
+node myworker_vp tcp://localhost:8060 WORKER1 Ready DONE &
+node myworker_vp tcp://localhost:8060 WORKER2 Ready OK &
 
 for i in {1..100}
 do
