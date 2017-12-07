@@ -37,4 +37,4 @@ responder.connect(backendURL);
  setTimeout(function(){
     console.log('Terminado'+myID);
     process.exit();
- },20000)
+ },60000)
