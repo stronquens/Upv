@@ -10,7 +10,7 @@ var myMsg = args[2] || 'Hello';
 if (myID != 'NONE')
     requester.identity = myID;
 requester.connect(brokerURL);
-console.log('Client (%s) connected to %s', myID, brokerURL)
+console.log('Client (%s) connected to %s', myID, brokerURL);
 
 requester.on('message', function (msg) {
     console.log('Client (%s) has received reply "%s"', myID, msg.toString());
